@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
 
+{% block title %} {{title}} {% endblock %}
+
 {% block content %}
-<form method="POST" action="">
+<form method="POST" action="" enctype=multipart/form-data>
+  <h3>Method: {{ title }}</h3>
+  <input type="file" name="fil"><br>
+  <p>or</p>
+
   {{ text|safe }}
+
+  <br>
+  <button type="submit">Calculate</button>
+  <button type="reset">Clear</button>
+  <br>
+  <br>
+  <button type="submit" name="rand" value="3">Random</button>
+
+  <p>{{ answer|safe }}</p>
 </form>
 {% endblock %}

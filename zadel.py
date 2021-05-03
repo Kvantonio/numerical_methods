@@ -1,4 +1,6 @@
 import copy
+import numpy as np
+from dop import isDominant, isPositive
 
 
 def zadel(A, B, rd, N=100):
@@ -6,6 +8,19 @@ def zadel(A, B, rd, N=100):
     x = [0 for i in range(m)]
     converge = False
     it = 0
+    errors = []
+    if np.linalg.det(A.copy()) == 0:
+        return False, -1
+
+    if not isDominant(A.copy()) and (0 not in np.diag(A)):
+        errors.append(-2)
+
+    if not isPositive(A.copy()):
+        errors.append(-3)
+
+    if 0 in np.diag(A):
+        return False, errors
+
     while (not converge) and (it <= N):
         x_new = copy.copy(x)
         for i in range(m):
@@ -15,7 +30,15 @@ def zadel(A, B, rd, N=100):
         pogr = sum(abs(x_new[i] - x[i]) for i in range(m))
         it += 1
         converge = pogr <= pow(1, -(rd+1))
-        if converge:
-            print(it)
         x = x_new
-    return x
+
+    err = False
+    for i in x:
+        if np.isnan(i) or np.isinf(i) or i > 100000 or i < -100000:
+            err = True
+
+    if not err:
+        return True, [np.round(i, rd) for i in x]
+    else:
+        return False, errors
+
