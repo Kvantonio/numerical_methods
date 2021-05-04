@@ -125,6 +125,10 @@ def index():
     if request.method == 'POST':
         method = request.form.get('sel-method')
         size = request.form.get('sel-size')
-        return redirect(f'/method/{int(method)}/size/{int(size)}')
+        if int(method) == 0 and int(size) > 4:
+            err = "matrix > 4 use another method"
+            return render_template('index.html', err=err)
+        else:
+            return redirect(f'/method/{int(method)}/size/{int(size)}')
 
     return render_template('index.html')
