@@ -1,5 +1,6 @@
-import numpy as np
 import copy
+
+import numpy as np
 
 
 def kramer(A, B, rd):
@@ -11,16 +12,15 @@ def kramer(A, B, rd):
 
     A = A.swapaxes(0, 1)
     a_s = copy.copy(A)
-    determ = np.linalg.det(A)
-
-    if determ == 0:
+    det = np.linalg.det(A)
+    if det == 0:
         return -1
 
     for j in range(len(A)):
         A = copy.copy(a_s)
         A[j] = B
         te = np.linalg.det(A)
-        x = te/determ
+        x = te/det
         res.append(round(x, rd))
 
     return res

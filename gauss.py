@@ -1,13 +1,19 @@
+import numpy as np
+
+
 def gauss(A, B, rd):
     column = 0
-    while (column < len(B)):
+
+    if np.linalg.det(A) == 0:
+        return -1
+
+    while column < len(B):
         current_row = None
         # Ищем максимальный по модулю элемент в N столбце
         for r in range(column, len(A)):
             if (current_row is None) or \
                     (abs(A[r][column]) > abs(A[current_row][column])):
                 current_row = r
-
         # решений нет
         if current_row is None:
             return -1

@@ -1,5 +1,6 @@
+from dop import isDominant, isPositive, spectralRadius
+
 import numpy as np
-from dop import spectralRadius, isDominant, isPositive
 
 
 def jacobi(A, B, rd, N=1000):
@@ -33,13 +34,7 @@ def jacobi(A, B, rd, N=1000):
     for i in X:
         if np.isnan(i) or np.isinf(i) or i > 100000 or i < -100000:
             err = True
-    print(X)
     if not err:
         return True, [np.round(i, rd) for i in X2.tolist()]
     else:
         return False, errors
-
-
-
-
-

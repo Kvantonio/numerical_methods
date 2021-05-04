@@ -1,13 +1,14 @@
 import os
 from flask import Flask, request, redirect, render_template
 from werkzeug.utils import secure_filename
+from dop import parse_file, generate_rand
 
 from gauss import gauss
 from kramer import kramer
 from zadel import zadel
 from jordan_gauss import jordan_gauss
 from jacobi import jacobi
-from dop import parse_file, generate_rand
+
 
 app = Flask(__name__)
 
@@ -37,15 +38,19 @@ def generate_form(n, method, A=[], B=[], rd=3):
     if not A:
         A = [[0 for _ in range(n)] for _ in range(n)]
         B = [0 for _ in range(n)]
-    res += f"  <p></p>Round: <input type='number' min='0' value='{rd}' name='round' class='nums'></p>"
+    res += "  <p></p>Round: <input type='number' min='0'" + \
+           f" value='{rd}' name='round' class='nums'></p>"
     for i in range(len(A)):
         for j in range(len(A)):
-            res += f"<input type='number' name='mat_a' max='99' min='-99' class='nums' value='{A[i][j]}'>"
+            res += "<input type='number' name='mat_a'" + \
+                   f" max='99' min='-99' class='nums' value='{A[i][j]}'>"
 
-        res += f" = <input type='number' value='{B[i]}' name='mat_b' max='99' min='-99' class='nums dop'>"
+        res += f" = <input type='number' value='{B[i]}'" + \
+               " name='mat_b' max='99' min='-99' class='nums dop'>"
         res += '<br>'
     if method in (2, 4):
-        res += f"Iterations: <input type='number' name='iter' max='10000' min='1' class='nums' value='100'>"
+        res += "Iterations: <input type='number' name='iter'" + \
+               " max='10000' min='1' class='nums' value='100'>"
 
     return res
 
@@ -102,7 +107,12 @@ def methods_logic(method, size):
             answer = ''.join(answer)
 
         return render_template('method.html',
-                               text=generate_form(size, method=method, A=A, B=B, rd=rd),
+                               text=generate_form(
+                                   size,
+                                   method=method,
+                                   A=A,
+                                   B=B,
+                                   rd=rd),
                                title=methods[method], answer=answer)
     else:
         return render_template('method.html',
@@ -115,7 +125,6 @@ def index():
     if request.method == 'POST':
         method = request.form.get('sel-method')
         size = request.form.get('sel-size')
-        # print(request.form.getlist('my_checkbox'))
         return redirect(f'/method/{int(method)}/size/{int(size)}')
 
     return render_template('index.html')

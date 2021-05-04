@@ -1,6 +1,8 @@
 import copy
-import numpy as np
+
 from dop import isDominant, isPositive
+
+import numpy as np
 
 
 def zadel(A, B, rd, N=100):
@@ -30,6 +32,7 @@ def zadel(A, B, rd, N=100):
         pogr = sum(abs(x_new[i] - x[i]) for i in range(m))
         it += 1
         converge = pogr <= pow(1, -(rd+1))
+
         x = x_new
 
     err = False
@@ -41,4 +44,3 @@ def zadel(A, B, rd, N=100):
         return True, [np.round(i, rd) for i in x]
     else:
         return False, errors
-
