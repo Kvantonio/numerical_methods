@@ -1,5 +1,5 @@
 import os  # noqa: I201
-from dop import generate_rand, parse_file  # noqa: I201
+from dop import generate_rand, parse_file, checkRoots  # noqa: I201
 from flask import Flask, redirect, render_template, request  # noqa: I201
 from werkzeug.utils import secure_filename  # noqa: I201
 
@@ -105,6 +105,11 @@ def methods_logic(method, size):
         else:
             answer = [f' X{i} = {x} <br>' for i, x in enumerate(X)]
             answer = ''.join(answer)
+            if request.form.get('checkRoots'):
+                if checkRoots(A, B, X):
+                    answer += '<br>Roots is true'
+                else:
+                    answer += '<br>Roots is false'
 
         return render_template('method.html',
                                text=generate_form(

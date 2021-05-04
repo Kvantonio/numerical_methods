@@ -45,3 +45,13 @@ def spectralRadius(mat, k):
     a = f_norm ** (1.0 / k)
 
     return round(a, 3)
+
+
+def checkRoots(A, B, X):
+    res = []
+    for i in range(len(A)):
+        sum = 0.0
+        for j in range(len(A)):
+            sum += A[i][j] * X[j]
+        res.append(sum)
+    return [round(item, len(str(B[i]))) for i, item in enumerate(res)] == B
