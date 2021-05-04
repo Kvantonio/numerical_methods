@@ -6,15 +6,6 @@ from jacobi import jacobi
 from dop import generate_rand
 
 
-A = [
-    [2, 1, 1],
-    [1, -1, 0],
-    [3, -1, 2]
-    ]
-
-B = [2, -2, 2]
-
-
 for j in range(10):
     A, B = generate_rand(3, -10, 10)
 

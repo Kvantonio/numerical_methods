@@ -1,13 +1,13 @@
-import os
-from flask import Flask, request, redirect, render_template
-from werkzeug.utils import secure_filename
-from dop import parse_file, generate_rand
+import os  # noqa: I201
+from dop import generate_rand, parse_file  # noqa: I201
+from flask import Flask, redirect, render_template, request  # noqa: I201
+from werkzeug.utils import secure_filename  # noqa: I201
 
-from gauss import gauss
-from kramer import kramer
-from zadel import zadel
-from jordan_gauss import jordan_gauss
-from jacobi import jacobi
+from kramer import kramer  # noqa: I201, I100
+from gauss import gauss  # noqa: I201, I100
+from zadel import zadel  # noqa: I201, I100
+from jordan_gauss import jordan_gauss  # noqa: I201, I100
+from jacobi import jacobi  # noqa: I201, I100
 
 
 app = Flask(__name__)
