@@ -9,7 +9,7 @@ def Euler(f, a, b, y0, n):
 
     for i in range(0, len(t) - 1):
         Y[i + 1] = Y[i] + h * f(t[i], Y[i])
-
+    print(Y)
     return Y.tolist()
 
 
@@ -56,3 +56,6 @@ def rungeKuttaFourth(f, a, b, y0, n):
         y[i + 1] = y[i] + (k1 + 2 * k2 + 2 * k3 + k4) / 6
 
     return y.tolist()
+
+
+#print(Euler(lambda x,y:(x*x) -(2*y), 0.0, 1.0, 1.0, 10))

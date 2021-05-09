@@ -94,18 +94,33 @@ def diff():
         y0 = float(request.form.get('y'))
         n = int(request.form.get('n'))
 
-        functions = [(lambda x, y: -1 * (x * y)),
+        functions_d = [(lambda x, y: -1 * (x * y)),
                      (lambda x, y: x + y),
-                     (lambda x, y: (3 * x - 12 * x * x) * y)]
-        if method == 0:
-            Y = Euler(functions[func], a, b, y0, n)
-        elif method == 1:
-            Y = rungeKuttaSecond(functions[func], a, b, y0, n)
-        elif method == 2:
-            Y = rungeKuttaThird(functions[func], a, b, y0, n)
-        elif method == 3:
-            Y = rungeKuttaFourth(functions[func], a, b, y0, n)
+                     (lambda x, y: (3 * x - 12 * x * x) * y),
+                     (lambda x, y: pow(x, 2) - (y*2))
+                     ]
 
+        print(func)
+        print(method)
+        print(a)
+        print(b)
+        print(y0)
+        print(n)
+        print('f', functions_d[func])
+        if method == 0:
+            print('fde')
+            Y = Euler(functions_d[func], a, b, y0, n)
+        elif method == 1:
+            print('fd')
+            Y = rungeKuttaSecond(functions_d[func], a, b, y0, n)
+        elif method == 2:
+            print('fd')
+            Y = rungeKuttaThird(functions_d[func], a, b, y0, n)
+        elif method == 3:
+            print('fd')
+            Y = rungeKuttaFourth(functions_d[func], a, b, y0, n)
+
+        print(Y)
         h = (b - a) / n
         x = [round(item, 5) for item in np.arange(a, b + h, h)]
         return render_template('diff.html',
