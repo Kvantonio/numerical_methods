@@ -3,24 +3,28 @@
 {% block title %} {{title}} {% endblock %}
 
 {% block content %}
-<form method="POST" action="" enctype=multipart/form-data>
-  <h3>Method: {{ title }}</h3>
-  <input type="file" name="fil"><br>
-  <p>or</p>
+<a class="back" href="{{ url_for('methods_menu')}}">
+    <button>Back</button>
+</a>
 
-  {{ text|safe }}
+<form action="" enctype=multipart/form-data method="POST">
+    <h3>Method: {{ title }}</h3>
+    <input name="fil" type="file"><br>
+    <p>or</p>
 
-  <br>
-  <label for="chroots">Check roots</label>
-  <input type="checkbox" name="checkRoots" id='chroots'>
-  <br>
-  <br>
-  <button type="submit">Calculate</button>
-  <button type="reset">Clear</button>
-  <br>
-  <br>
-  <button type="submit" name="rand" value="3">Random</button>
+    {{ text|safe }}
 
-  <p>{{ answer|safe }}</p>
+    <br>
+    <label for="chroots">Check roots</label>
+    <input id='chroots' name="checkRoots" type="checkbox">
+    <br>
+    <br>
+    <button type="submit">Calculate</button>
+    <button type="reset">Clear</button>
+    <br>
+    <br>
+    <button name="rand" type="submit" value="3">Random</button>
+
+    <p>{{ answer|safe }}</p>
 </form>
 {% endblock %}

@@ -1,14 +1,23 @@
 import os  # noqa: I201
-from dop import generate_rand, parse_file, checkRoots  # noqa: I201
-from flask import Flask, redirect, render_template, request  # noqa: I201
-from werkzeug.utils import secure_filename  # noqa: I201
 
-from kramer import kramer  # noqa: I201, I100
+import numpy as np  # noqa: I201
+from flask import Flask, abort, redirect, render_template, \
+    request  # noqa: I201, I100
+from werkzeug.utils import secure_filename  # noqa: I201, I100
+
+from diff import Euler, rungeKuttaFourth, \
+    rungeKuttaSecond, rungeKuttaThird  # noqa: I201, I100
+from dop import checkRoots, generateIntegration, generate_rand, \
+    graph, parse_file  # noqa: I201, I100
 from gauss import gauss  # noqa: I201, I100
-from zadel import zadel  # noqa: I201, I100
-from jordan_gauss import jordan_gauss  # noqa: I201, I100
+from generates import generateErrors, generateIntegrateTable, generateTable, \
+    generate_form  # noqa: I201, I100
+from integrate import Simpson, centralRectangle, leftRectangle, \
+    rightRectangle, trapezium  # noqa: I201, I100
 from jacobi import jacobi  # noqa: I201, I100
-
+from jordan_gauss import jordan_gauss  # noqa: I201, I100
+from kramer import kramer  # noqa: I201, I100
+from zadel import zadel  # noqa: I201, I100
 
 app = Flask(__name__)
 
@@ -16,44 +25,6 @@ UPLOAD_FOLDER = './upload/'
 ALLOWED_EXTENSIONS = {'txt'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-
-def generateErrors(X, method):
-    res = f'<p>Method {method} could not find a solution because:<p> <ul>'
-    if -2 in X:
-        res += "<li> Matrix has no diagonally dominant</li>"
-
-    if -3 in X:
-        res += "<li> Matrix does not positive-definite matrix</li>"
-
-    if -4 in X:
-        res += "<li> Spectral matrix radius > 1</li>"
-
-    res += '</ul>'
-    return res
-
-
-def generate_form(n, method, A=[], B=[], rd=3):
-    res = ''
-    if not A:
-        A = [[0 for _ in range(n)] for _ in range(n)]
-        B = [0 for _ in range(n)]
-    res += "  <p></p>Round: <input type='number' min='0'" + \
-           f" value='{rd}' name='round' class='nums'></p>"
-    for i in range(len(A)):
-        for j in range(len(A)):
-            res += "<input type='number' name='mat_a'" + \
-                   f" max='99' min='-99' class='nums' value='{A[i][j]}'>"
-
-        res += f" = <input type='number' value='{B[i]}'" + \
-               " name='mat_b' max='99' min='-99' class='nums dop'>"
-        res += '<br>'
-    if method in (2, 4):
-        res += "Iterations: <input type='number' name='iter'" + \
-               " max='10000' min='1' class='nums' value='100'>"
-
-    return res
-
 
 methods = ['Kramer', 'Gauss', 'Zadel', 'Jordan-Gauss', 'Jacobi']
 
@@ -63,10 +34,116 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
+@app.route('/sprint02/integrate_method/', methods=['GET', 'POST'])
+def integrate():
+    if request.method == 'POST':
+        method = int(request.form.get('sel-method'))
+        func = int(request.form.get('sel-func'))
+        a = float(request.form.get('a'))
+        b = float(request.form.get('b'))
+        n = int(request.form.get('n'))
+
+        functions = [(lambda x: 1 / np.log(x)), (lambda x: np.exp(-x)),
+                     (lambda x: np.sin(x)), (lambda x: np.exp(pow(-x, 2))),
+                     (lambda x: np.exp((-4 * x) - pow(x, 3)))]
+
+        if method == 0:
+            res = leftRectangle(functions[func], a, b, n)
+        elif method == 1:
+            res = rightRectangle(functions[func], a, b, n)
+        elif method == 2:
+            res = centralRectangle(functions[func], a, b, n)
+        elif method == 3:
+            res = trapezium(functions[func], a, b, n)
+        elif method == 4:
+            res = Simpson(functions[func], a, b, n)
+        elif method == 5:
+            res = [
+                leftRectangle(functions[func], a, b, n),
+                rightRectangle(functions[func], a, b, n),
+                centralRectangle(functions[func], a, b, n),
+                trapezium(functions[func], a, b, n),
+                Simpson(functions[func], a, b, n)
+            ]
+            return render_template('integrate.html',
+                                   data=True,
+                                   graphJSON=generateIntegrateTable(res),
+                                   image=generateIntegration(
+                                       a, b, functions[func])
+                                   )
+
+        return render_template('integrate.html',
+                               res=res,
+
+                               image=generateIntegration(a, b, functions[func])
+                               )
+
+    return render_template('integrate.html')
+
+
+@app.route('/sprint02/diff_method/', methods=['GET', 'POST'])
+def diff():
+    if request.method == 'POST':
+        method = int(request.form.get('sel-method'))
+        func = int(request.form.get('sel-func'))
+        a = float(request.form.get('a'))
+        b = float(request.form.get('b'))
+        y0 = float(request.form.get('y'))
+        n = int(request.form.get('n'))
+
+        functions = [(lambda x, y: -1 * (x * y)),
+                     (lambda x, y: x + y),
+                     (lambda x, y: (3 * x - 12 * x * x) * y)]
+        if method == 0:
+            Y = Euler(functions[func], a, b, y0, n)
+        elif method == 1:
+            Y = rungeKuttaSecond(functions[func], a, b, y0, n)
+        elif method == 2:
+            Y = rungeKuttaThird(functions[func], a, b, y0, n)
+        elif method == 3:
+            Y = rungeKuttaFourth(functions[func], a, b, y0, n)
+
+        h = (b - a) / n
+        x = [round(item, 5) for item in np.arange(a, b + h, h)]
+        return render_template('diff.html',
+                               data=True,
+                               graphJSON=generateTable(a, b, n, Y),
+                               image=graph(x, Y))
+
+    return render_template('diff.html')
+
+
+@app.route('/sprint02/methods/', methods=['GET', 'POST'])
+def methods_menu_s2():
+    return render_template('s2_methods_menu.html')
+
+
+# Sprint01
+@app.route('/sprint01/methods/', methods=['GET', 'POST'])
+def methods_menu():
+    if request.method == 'POST':
+        method = request.form.get('sel-method')
+        size = request.form.get('sel-size')
+        if int(method) == 0 and int(size) > 4:
+            err = "matrix > 4 use another method"
+            return render_template('methods_menu.html', err=err)
+        else:
+            return redirect(f'/method/{int(method)}/size/{int(size)}')
+
+    return render_template('methods_menu.html')
+
+
+# Sprint01
 @app.route('/method/<int:method>/size/<int:size>', methods=['GET', 'POST'])
 def methods_logic(method, size):
-    if request.method == 'POST':
+    if size > 10:
+        abort(404)
 
+    if method == 0:
+        if size > 4:
+            abort(404)
+
+    if request.method == 'POST':
         if request.form.get('rand'):
             A, B = generate_rand(size, -10, 10)
         else:
@@ -127,13 +204,4 @@ def methods_logic(method, size):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        method = request.form.get('sel-method')
-        size = request.form.get('sel-size')
-        if int(method) == 0 and int(size) > 4:
-            err = "matrix > 4 use another method"
-            return render_template('index.html', err=err)
-        else:
-            return redirect(f'/method/{int(method)}/size/{int(size)}')
-
     return render_template('index.html')

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<a class="back" href="{{ url_for('methods_menu_s2')}}">
+    <button>Back</button>
+</a>
+<form action="" method="POST">
+    <select name="sel-method">
+        <option value="0">Euler</option>
+        <option value="1">Runge-Kutta(2)</option>
+        <option value="2">Runge-Kutta(3)</option>
+        <option value="3">Runge-Kutta(4)</option>
+
+    </select>
+    <select name="sel-func">
+        <option value="0">-yx</option>
+        <option value="1">y+x</option>
+        <option value="2">(3x - 12x²)y</option>
+    </select>
+    <br>
+    A:<input class='nums' name='a' required step="0.01" type='number'>
+    B:<input class='nums' name='b' required step="0.01" type='number'>
+    <br>
+    y0:<input class='nums' name='y' required step="0.01" type='number'>
+    N:<input class='nums' name='n' required type='number'>
+    <br>
+    <button type="submit">Calculate</button>
+    <br>
+    <br>
+    {{ y }}
+    <br>
+    <br>
+
+</form>
+
+
+{% if data %}
+<div class="data">
+    <div class="chart" id="chart"></div>
+    <img src='data:image/png; base64,{{image }}' width="700px">
+
+</div>
+
+
+{% endif %}
+
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+    var graphs = {
+    {
+        graphJSON | safe
+    }
+    }
+
+    Plotly.plot('chart', graphs, {});
+</script>
+{% endblock %}

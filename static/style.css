@@ -11,3 +11,21 @@ input.dop{
     border-radius: 5px;
     color: black;
 }
+
+.content{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.back button{
+    display: block;
+}
+
+.data{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    text-align: center;
+}

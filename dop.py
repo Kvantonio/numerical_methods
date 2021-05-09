@@ -1,6 +1,10 @@
-import random
+import base64  # noqa: I201
+import random  # noqa: I201
+from io import BytesIO  # noqa: I201
 
-import numpy as np
+import matplotlib.pyplot as plt  # noqa: I201
+from matplotlib.patches import Polygon  # noqa: I201
+import numpy as np  # noqa: I201
 
 
 def generate_rand(long, a, b):
@@ -50,8 +54,52 @@ def spectralRadius(mat, k):
 def checkRoots(A, B, X):
     res = []
     for i in range(len(A)):
-        sum = 0.0
+        s = 0.0
         for j in range(len(A)):
-            sum += A[i][j] * X[j]
-        res.append(sum)
-    return [round(item, len(str(B[i]))) for i, item in enumerate(res)] == B
+            s += A[i][j] * X[j]
+        res.append(s)
+    return [round(item) for i, item in enumerate(res)] == B
+
+
+def graph(x, y):
+    fig = plt.figure(figsize=(12, 8))
+    plt.plot(x, y, 'ro--')
+    plt.grid()
+    tmpfile = BytesIO()
+    fig.savefig(tmpfile, format='png')
+    encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
+
+    return encoded
+
+
+def generateIntegration(a, b, f):
+    x = np.linspace(a - 0.5, b + 0.5)
+    y = f(x)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y, 'r')
+    ax.set_ylim(bottom=0)
+
+    # Make the shaded region
+    ix = np.linspace(a, b)
+    iy = f(ix)
+    verts = [(a, 0), *zip(ix, iy), (b, 0)]
+    poly = Polygon(verts, facecolor='0.9', edgecolor='0.5')
+    ax.add_patch(poly)
+
+    fig.text(0.9, 0.05, '$x$')
+    fig.text(0.1, 0.9, '$y$')
+
+    ax.spines.right.set_visible(False)
+    ax.spines.top.set_visible(False)
+    ax.xaxis.set_ticks_position('bottom')
+
+    ax.set_xticks((a, b))
+
+    ax.set_xticklabels(('$a$', '$b$'))
+
+    tmpfile = BytesIO()
+    fig.savefig(tmpfile, format='png')
+    encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
+
+    return encoded

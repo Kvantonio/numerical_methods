@@ -5,12 +5,14 @@
     <title>{% block title %}Base{% endblock %}</title>
 </head>
 <body>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<a href="{{ url_for('index')}}"><button>Back</button></a>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+<a href="{{ url_for('index')}}">
+    <button>Home</button>
+</a>
 <div class="content">
-{% block content %}
+    {% block content %}
 
-{% endblock %}
+    {% endblock %}
 </div>
 </body>
 </html>
