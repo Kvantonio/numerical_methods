@@ -13,35 +13,32 @@
         <option value="3">Trapeziums</option>
         <option value="4">Simpson</option>
         <option value="5">All methods</option>
-
     </select>
+
     <select name="sel-func">
-        <option value="0">1/ln(x)</option>
         <option value="1">exp(-x)</option>
+        <option value="0">1/ln(x)</option>
         <option value="2">sin(x)</option>
         <option value="2">exp(-x²)</option>
         <option value="2">exp(-4x-x³)</option>
     </select>
     <br>
-    A:<input class='nums' name='a' required step="0.01" type='number'>
-    B:<input class='nums' name='b' required step="0.01" type='number'>
+    A:<input class='nums' value="{{a}}" name='a' required step="0.01" type='number'>
+    B:<input class='nums' value="{{b}}" name='b' required step="0.01" type='number'>
     <br>
-    N:<input class='nums' name='n' required type='number'>
+    N:<input class='nums' value="{{n}}" name='n' required type='number'>
     <br>
     <button type="submit">Calculate</button>
     <br>
     <br>
-
 </form>
 
 
 {% if data %}
 <div class="data">
     <div class="chart" id="chart"></div>
-    <!--<img src="/plot.png" alt="my plot">-->
     <img src='data:image/png; base64,{{image }}' width="500px">
 </div>
-
 {% endif %}
 
 
@@ -55,12 +52,7 @@ Area: {{ res }}
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
-    var graphs = {
-    {
-        graphJSON | safe
-    }
-    }
-
+    var graphs = {{ graphJSON | safe }};
     Plotly.plot('chart', graphs, {});
 </script>
 {% endblock %}

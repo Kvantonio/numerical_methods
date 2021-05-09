@@ -69,16 +69,19 @@ def integrate():
                                    data=True,
                                    graphJSON=generateIntegrateTable(res),
                                    image=generateIntegration(
-                                       a, b, functions[func])
+                                       a, b, functions[func]),
+                                   a=a, b=b, n=n
                                    )
 
         return render_template('integrate.html',
                                res=res,
-
-                               image=generateIntegration(a, b, functions[func])
+                               image=generateIntegration(
+                                   a, b, functions[func]
+                               ),
+                               a=a, b=b, n=n
                                )
 
-    return render_template('integrate.html')
+    return render_template('integrate.html', a=0, b=0, n=0)
 
 
 @app.route('/sprint02/diff_method/', methods=['GET', 'POST'])
@@ -108,9 +111,11 @@ def diff():
         return render_template('diff.html',
                                data=True,
                                graphJSON=generateTable(a, b, n, Y),
-                               image=graph(x, Y))
+                               image=graph(x, Y),
+                               a=a, b=b, n=n, y0=y0
+                               )
 
-    return render_template('diff.html')
+    return render_template('diff.html', a=0, b=0, n=0, y0=0)
 
 
 @app.route('/sprint02/methods/', methods=['GET', 'POST'])
