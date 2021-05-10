@@ -9,7 +9,6 @@ def Euler(f, a, b, y0, n):
 
     for i in range(0, len(t) - 1):
         Y[i + 1] = Y[i] + h * f(t[i], Y[i])
-    print(Y)
     return Y.tolist()
 
 

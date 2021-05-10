@@ -8,13 +8,14 @@ from werkzeug.utils import secure_filename  # noqa: I201, I100
 from diff import Euler, rungeKuttaFourth, \
     rungeKuttaSecond, rungeKuttaThird  # noqa: I201, I100
 from dop import checkRoots, generateIntegration, generate_rand, \
-    graph, parse_file, normaliseSets  # noqa: I201, I100
+    graph, normaliseSets, parse_file  # noqa: I201, I100
 from gauss import gauss  # noqa: I201, I100
 from generates import generateErrors, generateIntegrateTable, generateTable, \
     generate_form  # noqa: I201, I100
 from integrate import Simpson, centralRectangle, leftRectangle, \
     rightRectangle, trapezium  # noqa: I201, I100
-from setsOperations import entrance, merge, traversal, symmetricalDifference, difference
+from setsOperations import difference, entrance, merge,\
+    symmetricalDifference, traversal  # noqa: I201, I100
 from jacobi import jacobi  # noqa: I201, I100
 from jordan_gauss import jordan_gauss  # noqa: I201, I100
 from kramer import kramer  # noqa: I201, I100
@@ -43,6 +44,9 @@ def integrate():
         a = float(request.form.get('a'))
         b = float(request.form.get('b'))
         n = int(request.form.get('n'))
+
+        if a > b:
+            a, b = b, a
 
         functions = [(lambda x: 1 / np.log(x)), (lambda x: np.exp(-x)),
                      (lambda x: np.sin(x)), (lambda x: np.exp(pow(-x, 2))),
@@ -99,10 +103,10 @@ def diff():
             a, b = b, a
 
         functions_d = [(lambda x, y: -1 * (x * y)),
-                     (lambda x, y: x + y),
-                     (lambda x, y: (3 * x - 12 * x * x) * y),
-                     (lambda x, y: pow(x, 2) - (y*2))
-                     ]
+                       (lambda x, y: x + y),
+                       (lambda x, y: (3 * x - 12 * x * x) * y),
+                       (lambda x, y: pow(x, 2) - (y * 2))
+                       ]
 
         if method == 0:
             Y = Euler(functions_d[func], a, b, y0, n)
