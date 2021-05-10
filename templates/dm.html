@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<a class="back" href="{{ url_for('methods_menu_s2')}}">
+    <button>Back</button>
+</a>
+<form action="" method="POST">
+    A:<input value="{{A}}" name='set_a' required >
+    <select name="meth" class="dm">
+        <option value="0">⊆</option>
+        <option value="1">∪</option>
+        <option value="2">∩</option>
+        <option value="3">A/B</option>
+        <option value="4">B/A</option>
+        <option value="5">Δ</option>
+        <option value="6">⊇</option>
+    </select>
+    B:<input value="{{B}}" name='set_b' required>
+    <button type="submit">Do</button>
+    <br>
+    <br>
+</form>
+
+
+{% if data %}
+Output set: {{ data }}
+{% endif %}
+{% endblock %}

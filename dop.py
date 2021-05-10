@@ -103,3 +103,9 @@ def generateIntegration(a, b, f):
     encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
 
     return encoded
+
+
+def normaliseSets(A, B):
+    A = sorted(list(set(filter(lambda x: len(x) > 0, A.split(' ')))))
+    B = sorted(list(set(B.split(' '))))
+    return A, B

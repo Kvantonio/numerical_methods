@@ -8,12 +8,13 @@ from werkzeug.utils import secure_filename  # noqa: I201, I100
 from diff import Euler, rungeKuttaFourth, \
     rungeKuttaSecond, rungeKuttaThird  # noqa: I201, I100
 from dop import checkRoots, generateIntegration, generate_rand, \
-    graph, parse_file  # noqa: I201, I100
+    graph, parse_file, normaliseSets  # noqa: I201, I100
 from gauss import gauss  # noqa: I201, I100
 from generates import generateErrors, generateIntegrateTable, generateTable, \
     generate_form  # noqa: I201, I100
 from integrate import Simpson, centralRectangle, leftRectangle, \
     rightRectangle, trapezium  # noqa: I201, I100
+from setsOperations import entrance, merge, traversal, symmetricalDifference, difference
 from jacobi import jacobi  # noqa: I201, I100
 from jordan_gauss import jordan_gauss  # noqa: I201, I100
 from kramer import kramer  # noqa: I201, I100
@@ -103,27 +104,15 @@ def diff():
                      (lambda x, y: pow(x, 2) - (y*2))
                      ]
 
-        print(func)
-        print(method)
-        print(a)
-        print(b)
-        print(y0)
-        print(n)
-        print('f', functions_d[func])
         if method == 0:
-            print('fde')
             Y = Euler(functions_d[func], a, b, y0, n)
         elif method == 1:
-            print('fd')
             Y = rungeKuttaSecond(functions_d[func], a, b, y0, n)
         elif method == 2:
-            print('fd')
             Y = rungeKuttaThird(functions_d[func], a, b, y0, n)
         elif method == 3:
-            print('fd')
             Y = rungeKuttaFourth(functions_d[func], a, b, y0, n)
 
-        print(Y)
         h = (b - a) / n
         x = [round(item, 5) for item in np.arange(a, b + h, h)]
         return render_template('diff.html',
@@ -223,6 +212,39 @@ def methods_logic(method, size):
         return render_template('method.html',
                                text=generate_form(size, method=method),
                                title=methods[method])
+
+
+@app.route('/dm/', methods=['GET', 'POST'])
+def dm():
+    if request.method == 'POST':
+        data_A, data_B = request.form.get('set_a'), request.form.get('set_b')
+        A, B = normaliseSets(data_A, data_B)
+        method = int(request.form.get('meth'))
+
+        if method == 0:
+            res = entrance(A.copy(), B.copy())
+            res = [str(res)]
+        elif method == 1:
+            res = merge(A.copy(), B.copy())
+        elif method == 2:
+            res = traversal(A.copy(), B.copy())
+        elif method == 3:
+            res = difference(A.copy(), B.copy())
+        elif method == 4:
+            res = difference(B.copy(), A.copy())
+        elif method == 5:
+            res = symmetricalDifference(B.copy(), A.copy())
+        elif method == 6:
+            res = entrance(B.copy(), A.copy())
+            res = [str(res)]
+
+        if res:
+            res = ', '.join(res)
+        else:
+            res = 'Empty'
+        return render_template('dm.html', A=data_A, B=data_B, data=res)
+
+    return render_template('dm.html')
 
 
 @app.route('/', methods=['GET', 'POST'])
