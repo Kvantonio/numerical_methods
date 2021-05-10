@@ -56,6 +56,3 @@ def rungeKuttaFourth(f, a, b, y0, n):
         y[i + 1] = y[i] + (k1 + 2 * k2 + 2 * k3 + k4) / 6
 
     return y.tolist()
-
-
-#print(Euler(lambda x,y:(x*x) -(2*y), 0.0, 1.0, 1.0, 10))

@@ -94,6 +94,9 @@ def diff():
         y0 = float(request.form.get('y'))
         n = int(request.form.get('n'))
 
+        if a > b:
+            a, b = b, a
+
         functions_d = [(lambda x, y: -1 * (x * y)),
                      (lambda x, y: x + y),
                      (lambda x, y: (3 * x - 12 * x * x) * y),
