@@ -8,7 +8,7 @@ def leftRectangle(f, a, b, n):
 
 def rightRectangle(f, a, b, n):
     h = (b - a) / n
-    res = 0
+    res = f(a)
     for i in range(1, n + 1):
         res += f(a + (h * i))
     return res * h
