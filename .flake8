@@ -1,4 +1,4 @@
 [flake8]
 
-exclude = .git, __pycache__, test.py, venv, nums.py
+exclude = .git, __pycache__, venv
 
