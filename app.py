@@ -14,12 +14,14 @@ from generates import generateErrors, generateIntegrateTable, generateTable, \
     generate_form  # noqa: I201, I100
 from integrate import Simpson, centralRectangle, leftRectangle, \
     rightRectangle, trapezium  # noqa: I201, I100
-from setsOperations import difference, entrance, merge,\
+from setsOperations import difference, entrance, merge, \
     symmetricalDifference, traversal  # noqa: I201, I100
 from jacobi import jacobi  # noqa: I201, I100
 from jordan_gauss import jordan_gauss  # noqa: I201, I100
 from kramer import kramer  # noqa: I201, I100
 from zadel import zadel  # noqa: I201, I100
+
+from nums import Graph  # noqa: I201, I100
 
 app = Flask(__name__)
 
@@ -249,6 +251,45 @@ def dm():
         return render_template('dm.html', A=data_A, B=data_B, data=res)
 
     return render_template('dm.html')
+
+
+@app.route('/dm2/', methods=['GET', 'POST'])
+def dm2():
+    if request.method == 'POST':
+        graph = Graph()
+        if request.form.get('my'):
+            graph.addToGraph('А', 'Б')
+            graph.addToGraph('А', 'В')
+            graph.addToGraph('Б', 'Г')
+            graph.addToGraph('Б', 'Д')
+            graph.addToGraph('В', 'Б')
+            graph.addToGraph('В', 'Г')
+            graph.addToGraph('В', 'Ж')
+            graph.addToGraph('В', 'Е')
+            graph.addToGraph('Г', 'Д')
+            graph.addToGraph('Г', 'Ж')
+            graph.addToGraph('Д', 'Ж')
+            graph.addToGraph('Е', 'Ж')
+        else:
+            pass
+
+        degree = graph.calcDegree()
+        im = graph.getGraph()
+        preim = graph.getPreimage()
+        adMatrix = graph.adjacencyMatrixToTable()
+        inMatrix = graph.incidenceMatrixToTable()
+        t = graph.drawGraph()
+        image = graph.graphImgToBytes(t)
+
+        return render_template('dm2.html',
+                               degree=degree,
+                               im=im,
+                               preim=preim,
+                               adMatrix=adMatrix,
+                               inMatrix=inMatrix,
+                               image=image)
+
+    return render_template('dm2.html')
 
 
 @app.route('/', methods=['GET', 'POST'])

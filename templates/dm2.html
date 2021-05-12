@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<form action="" method="POST">
+    <textarea name="data" cols="30" rows="10"></textarea>
+    <p>or</p>
+    <button type="submit" name="my" value="my">My graph</button>
+
+    <button type="submit">Go</button>
+</form>
+
+
+{% if my %}
+    <img src="{{url_for('static', 'my_graph.png')}}" alt="">
+{% else %}
+    <img src='data:image/png; base64,{{image}}' width="500px">
+{% endif %}
+
+
+Degree:
+<p>
+{% for x in degree %}
+    {{x}}: {{degree[x]}};
+{% endfor%}
+</p>
+<table>
+    <tr class="header">
+        <td>Images</td>
+        <td>Preimages</td>
+    </tr>
+    <tr>
+        <td>
+        {% for x in im%}
+            <p>{{x}}: { <i> {% for item in im[x]%} {{ item }} {% endfor%}</i>}</p>
+        {% endfor%}
+        </td>
+
+        <td>
+        {% for x in preim%}
+        <p>{{x}}⁻¹: { <i> {% for item in preim[x]%} {{ item }} {% endfor%}</i>}</p>
+        {% endfor%}
+        </td>
+    </tr>
+</table>
+
+<table>
+
+    {% for row in adMatrix%}
+    <tr>
+        {% for item in row %}
+        <td>
+            {{item}}
+        </td>
+        {% endfor%}
+    </tr>
+    {% endfor%}
+</table>
+
+
+<table>
+    {% for row in inMatrix%}
+    <tr>
+        {% for item in row %}
+        <td>
+            {{item}}
+        </td>
+        {% endfor%}
+    </tr>
+    {% endfor%}
+</table>
+
+
+{% if data %}
+Output set: {{ data }}
+{% endif %}
+{% endblock %}
