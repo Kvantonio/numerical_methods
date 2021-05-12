@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import base64  # noqa: I201
 from io import BytesIO  # noqa: I201
 
+import re
+
 
 class Graph(object):
     def __init__(self):
@@ -16,6 +18,13 @@ class Graph(object):
 
     def getBridges(self):
         return self.bridges
+
+    def parseGraph(self, data):
+        temp = [bridge for bridge in re.sub(r'([\r\n\s]+)', '', data).split(',')]
+        temp = list(set(temp))
+        temp = list(filter(lambda br: len(br) == 2, [br.split('-') for br in temp]))
+        for br in temp:
+            self.addToGraph(br[0], br[1])
 
     def addToGraph(self, x1, x2):
         self.bridges.append([x1, x2])
@@ -81,7 +90,7 @@ class Graph(object):
         nx.draw(G, with_labels=True, node_color='skyblue', node_size=1500)
         if save:
             plt.savefig('graph.png', facecolor=fig.get_facecolor())
-        fig.show()
+        # fig.show()
         return fig
 
     @staticmethod
@@ -91,25 +100,25 @@ class Graph(object):
         encoded = base64.b64encode(tempfile.getvalue()).decode('utf-8')
         return encoded
 
-
-graph = Graph()
-
-graph.addToGraph('А', 'Б')
-graph.addToGraph('А', 'В')
-graph.addToGraph('Б', 'Г')
-graph.addToGraph('Б', 'Д')
-graph.addToGraph('В', 'Б')
-graph.addToGraph('В', 'Г')
-graph.addToGraph('В', 'Ж')
-graph.addToGraph('В', 'Е')
-graph.addToGraph('Г', 'Д')
-graph.addToGraph('Г', 'Ж')
-graph.addToGraph('Д', 'Ж')
-graph.addToGraph('Е', 'Ж')
 #
-
-graph.adjacencyMatrixToTable()
-graph.incidenceMatrixToTable()
+# graph = Graph()
+#
+# graph.addToGraph('А', 'Б')
+# graph.addToGraph('А', 'В')
+# graph.addToGraph('Б', 'Г')
+# graph.addToGraph('Б', 'Д')
+# graph.addToGraph('В', 'Б')
+# graph.addToGraph('В', 'Г')
+# graph.addToGraph('В', 'Ж')
+# graph.addToGraph('В', 'Е')
+# graph.addToGraph('Г', 'Д')
+# graph.addToGraph('Г', 'Ж')
+# graph.addToGraph('Д', 'Ж')
+# graph.addToGraph('Е', 'Ж')
+# #
+#
+# graph.adjacencyMatrixToTable()
+# graph.incidenceMatrixToTable()
 #
 # # graph.addToGraph(1, 2)
 # # graph.addToGraph(2, 3)

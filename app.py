@@ -257,22 +257,9 @@ def dm():
 def dm2():
     if request.method == 'POST':
         graph = Graph()
-        if request.form.get('my'):
-            graph.addToGraph('А', 'Б')
-            graph.addToGraph('А', 'В')
-            graph.addToGraph('Б', 'Г')
-            graph.addToGraph('Б', 'Д')
-            graph.addToGraph('В', 'Б')
-            graph.addToGraph('В', 'Г')
-            graph.addToGraph('В', 'Ж')
-            graph.addToGraph('В', 'Е')
-            graph.addToGraph('Г', 'Д')
-            graph.addToGraph('Г', 'Ж')
-            graph.addToGraph('Д', 'Ж')
-            graph.addToGraph('Е', 'Ж')
-        else:
-            pass
+        data = request.form.get('data')
 
+        graph.parseGraph(data)
         degree = graph.calcDegree()
         im = graph.getGraph()
         preim = graph.getPreimage()

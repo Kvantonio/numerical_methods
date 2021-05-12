@@ -3,17 +3,13 @@
 
 {% block content %}
 <form action="" method="POST">
-    <textarea name="data" cols="30" rows="10"></textarea>
-    <p>or</p>
-    <button type="submit" name="my" value="my">My graph</button>
-
+    <textarea name="data" cols="30" rows="10">А-Б, А-В, В-Б, В-Ж, В-Е, В-Г, Б-Д, Б-Г, Г-Д, Д-Ж, Г-Ж, Е-Ж</textarea>
+    <br>
     <button type="submit">Go</button>
 </form>
 
 
-{% if my %}
-    <img src="{{url_for('static', 'my_graph.png')}}" alt="">
-{% else %}
+{% if image %}
     <img src='data:image/png; base64,{{image}}' width="500px">
 {% endif %}
 
