@@ -91,12 +91,13 @@ class Graph(object):
         # nx.draw(G, with_labels=True, node_color='skyblue', node_size=1500)
 
         f = Digraph('graph', filename='static/fsm.gv',
-                    node_attr={'color': 'lightblue2', 'style': 'filled', 'shape': 'circle'})
-        f.attr(rankdir='A', size='10')
+                    node_attr={'color': 'lightblue2',
+                               'style': 'filled', 'shape': 'circle'})
+        f.attr(rankdir='A', size='1000')
 
         f.edges(self.bridges)
-        if save:
-            plt.savefig('graph.png', facecolor=fig.get_facecolor())
+        # if save:
+        #     plt.savefig('graph.png', facecolor=fig.get_facecolor())
         # fig.show()
         return f
 
@@ -106,7 +107,7 @@ class Graph(object):
         encoded = base64.b64encode(tempfile).decode('utf-8')
         return encoded
 
-#
+
 # graph = Graph()
 #
 # graph.addToGraph('А', 'Б')

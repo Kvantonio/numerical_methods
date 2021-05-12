@@ -3,14 +3,14 @@
 
 {% block content %}
 <form action="" method="POST">
-    <textarea name="data" cols="30" rows="10">А-Б, А-В, В-Б, В-Ж, В-Е, В-Г, Б-Д, Б-Г, Г-Д, Д-Ж, Г-Ж, Е-Ж</textarea>
+    <textarea name="data" cols="40" rows="5">А-Б, А-В, В-Б, В-Ж, В-Е, В-Г, Б-Д, Б-Г, Г-Д, Д-Ж, Г-Ж, Е-Ж</textarea>
     <br>
     <button type="submit">Go</button>
 </form>
 
 {% if data %}
 {% if image %}
-    <img src='data:image/png; base64,{{image}}' width="500px" height="500px">
+    <img src='data:image/png; base64,{{image}}' >
 {% endif %}
 
 
