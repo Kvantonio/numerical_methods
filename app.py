@@ -23,6 +23,12 @@ from zadel import zadel  # noqa: I201, I100
 
 from nums import Graph  # noqa: I201, I100
 
+
+
+from graphviz import Digraph
+
+
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = './upload/'
@@ -268,7 +274,10 @@ def dm2():
         t = graph.drawGraph()
         image = graph.graphImgToBytes(t)
 
+
+
         return render_template('dm2.html',
+                               data=True,
                                degree=degree,
                                im=im,
                                preim=preim,

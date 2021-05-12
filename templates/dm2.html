@@ -8,23 +8,21 @@
     <button type="submit">Go</button>
 </form>
 
-
+{% if data %}
 {% if image %}
-    <img src='data:image/png; base64,{{image}}' width="500px">
+    <img src='data:image/png; base64,{{image}}' width="500px" height="500px">
 {% endif %}
 
 
-Degree:
+<b>Degree:</b>
 <p>
 {% for x in degree %}
     {{x}}: {{degree[x]}};
 {% endfor%}
 </p>
-<table>
-    <tr class="header">
-        <td>Images</td>
-        <td>Preimages</td>
-    </tr>
+<table class="data">
+     <th >Images</th>
+        <th>Preimages</th>
     <tr>
         <td>
         {% for x in im%}
@@ -40,34 +38,65 @@ Degree:
     </tr>
 </table>
 
-<table>
 
-    {% for row in adMatrix%}
-    <tr>
-        {% for item in row %}
-        <td>
-            {{item}}
-        </td>
+<table class="keywords" cellspacing="0" cellpadding="0">
+    <thead>
+      <tr>
+        {% for item in adMatrix[0] %}
+        <th>
+            <span>{{item}}</span>
+        </th>
         {% endfor%}
-    </tr>
-    {% endfor%}
-</table>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in adMatrix[1:] %}
+      <tr>
+          <td class="lalign">{{row[0]}}</td>
+          {% for item in row[1:] %}
+
+        <td>{{ item }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="{{adMatrix[0]|length}}">Adjacency Matrix</td>
+        </tr>
+    </tfoot>
+  </table>
 
 
-<table>
-    {% for row in inMatrix%}
-    <tr>
-        {% for item in row %}
-        <td>
-            {{item}}
-        </td>
+<table class="keywords" cellspacing="0" cellpadding="0">
+    <thead>
+      <tr>
+        {% for item in inMatrix[0] %}
+        <th>
+            <span>{{item}}</span>
+        </th>
         {% endfor%}
-    </tr>
-    {% endfor%}
-</table>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in inMatrix[1:] %}
+      <tr>
+          <td class="lalign">{{row[0]}}</td>
+          {% for item in row[1:] %}
 
+        <td>{{ item }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
 
-{% if data %}
-Output set: {{ data }}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="{{inMatrix[0]|length}}">Incidence Matrix</td>
+        </tr>
+    </tfoot>
+  </table>
+
 {% endif %}
 {% endblock %}

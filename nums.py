@@ -1,7 +1,7 @@
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
-
+from graphviz import Digraph
 import base64  # noqa: I201
 from io import BytesIO  # noqa: I201
 
@@ -82,22 +82,28 @@ class Graph(object):
         return res
 
     def drawGraph(self, save=False):
-        left = [i[0] for i in self.bridges]
-        right = [i[1] for i in self.bridges]
-        df = pd.DataFrame({'from': left, 'to': right})
-        G = nx.from_pandas_edgelist(df, 'from', 'to', create_using=nx.Graph())
-        fig = plt.figure(figsize=(8, 8))
-        nx.draw(G, with_labels=True, node_color='skyblue', node_size=1500)
+        #
+        # left = [i[0] for i in self.bridges]
+        # right = [i[1] for i in self.bridges]
+        # df = pd.DataFrame({'from': left, 'to': right})
+        # G = nx.from_pandas_edgelist(df, 'from', 'to', create_using=nx.Graph())
+        # fig = plt.figure(figsize=(8, 8))
+        # nx.draw(G, with_labels=True, node_color='skyblue', node_size=1500)
+
+        f = Digraph('graph', filename='static/fsm.gv',
+                    node_attr={'color': 'lightblue2', 'style': 'filled', 'shape': 'circle'})
+        f.attr(rankdir='A', size='10')
+
+        f.edges(self.bridges)
         if save:
             plt.savefig('graph.png', facecolor=fig.get_facecolor())
         # fig.show()
-        return fig
+        return f
 
     @staticmethod
     def graphImgToBytes(fig):
-        tempfile = BytesIO()
-        fig.savefig(tempfile, format='png')
-        encoded = base64.b64encode(tempfile.getvalue()).decode('utf-8')
+        tempfile = fig.pipe(format='png')
+        encoded = base64.b64encode(tempfile).decode('utf-8')
         return encoded
 
 #
@@ -158,3 +164,13 @@ class Graph(object):
 # print(graph.graphImgToBytes(a))
 #
 #
+
+
+# gra = Graph()
+# #
+# #
+# #
+# y= 0
+# t = gra.graphImgToBytes(y)
+# print(t)
+# # f.view()
